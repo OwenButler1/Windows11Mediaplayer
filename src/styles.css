@@ -1,0 +1,96 @@
+:root {
+  color-scheme: dark;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #1b1b1b;
+  color: #f5f5f5;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.sidebar {
+  padding: 24px;
+  background: #121212;
+  border-right: 1px solid #333;
+}
+
+.sidebar h1 {
+  margin: 0;
+  font-size: 1.4rem;
+}
+
+.beta-badge {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #7dd3fc;
+}
+
+nav {
+  margin-top: 24px;
+  display: grid;
+  gap: 8px;
+}
+
+.nav-button {
+  padding: 10px 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #1f1f1f;
+  color: #f5f5f5;
+  text-align: left;
+}
+
+.nav-button.active {
+  border-color: #0ea5e9;
+  background: #0c4a6e;
+}
+
+.playback-area {
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.playback-area header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#openMediaBtn {
+  border: 1px solid #0ea5e9;
+  border-radius: 8px;
+  padding: 10px 14px;
+  background: #0369a1;
+  color: #fff;
+  cursor: pointer;
+}
+
+.load-status {
+  padding: 12px;
+  border: 1px solid #444;
+  border-radius: 8px;
+  background: #202020;
+  min-height: 24px;
+}
+
+.player-container {
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 12px;
+  background: #101010;
+}
+
+#player {
+  width: 100%;
+  max-height: 480px;
+  background: #000;
+}

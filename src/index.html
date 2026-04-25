@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Windows 11 Media Player (Beta)</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <h1>Media Player</h1>
+        <p class="beta-badge">Beta</p>
+        <nav>
+          <button class="nav-button active">Now Playing</button>
+          <button class="nav-button" disabled>Library</button>
+        </nav>
+      </aside>
+
+      <main class="playback-area">
+        <header>
+          <h2>Now Playing</h2>
+          <button id="openMediaBtn">Open Local Media</button>
+        </header>
+
+        <section class="load-status" id="loadStatus">
+          No file loaded yet.
+        </section>
+
+        <section class="player-container" id="playerContainer" hidden>
+          <video id="player" controls></video>
+        </section>
+      </main>
+    </div>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>

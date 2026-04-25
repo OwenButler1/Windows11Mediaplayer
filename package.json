@@ -1,0 +1,19 @@
+{
+  "name": "windows11mediaplayer-beta",
+  "version": "0.1.0",
+  "description": "Minimal Windows 11 media player beta shell",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "windows11",
+    "media-player",
+    "electron"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.7.7"
+  }
+}
