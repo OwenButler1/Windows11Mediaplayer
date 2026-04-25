@@ -1,0 +1,88 @@
+name: Windows CI
+
+on:
+  pull_request:
+    branches:
+      - "**"
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build (${{ matrix.configuration }})
+    runs-on: windows-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [Debug, Release]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v2
+
+      - name: Find solution file
+        id: solution
+        shell: pwsh
+        run: |
+          $sln = Get-ChildItem -Path . -Filter *.sln -Recurse | Select-Object -First 1
+
+          if (-not $sln) {
+            Write-Error "No .sln file found in repository."
+            exit 1
+          }
+
+          "path=$($sln.FullName)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~\\.nuget\\packages
+            ~\\AppData\\Local\\NuGet\\Cache
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.sln', '**/*.csproj', '**/*.vcxproj', '**/packages.config', '**/packages.lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: nuget restore "${{ steps.solution.outputs.path }}"
+
+      - name: Build solution
+        shell: pwsh
+        run: |
+          $config = "${{ matrix.configuration }}"
+          msbuild "${{ steps.solution.outputs.path }}" /m /p:Configuration=$config /p:Platform="Any CPU" /p:Restore=false /verbosity:minimal
+
+      - name: Collect build outputs
+        if: success()
+        shell: pwsh
+        run: |
+          $config = "${{ matrix.configuration }}"
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+
+          Get-ChildItem -Path . -Recurse -Directory |
+            Where-Object { $_.Name -eq $config } |
+            ForEach-Object {
+              $target = Join-Path "artifacts" ($_.FullName.Substring($pwd.Path.Length).TrimStart('\\') -replace '\\','_')
+              Copy-Item -Path $_.FullName -Destination $target -Recurse -Force
+            }
+
+      - name: Upload build artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build-${{ matrix.configuration }}
+          path: artifacts
+          if-no-files-found: warn
